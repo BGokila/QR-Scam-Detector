@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Shield | Universal QR Scam Detector</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="background">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <header>
+        <nav>
+            <h2 class="logo">🛡 QR Shield</h2>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#scanner">Scanner</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="history.html">Cloud History</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Universal QR Scam Detector</h1>
+            <p>Scan Web Links, Phishing URLs, UPI QRs, Wi-Fi & Texts safely.</p>
+            <button id="scanBtn">📷 Start Camera Scan</button>
+        </div>
+    </section>
+
+    <section id="scanner" class="scanner">
+        <h2>QR & URL Safety Analyzer</h2>
+
+        <div id="reader"></div>
+
+        <div class="url-check">
+            <input type="text" id="urlInput" placeholder="Paste URL, Text, or UPI Link here">
+            <button id="checkUrlBtn">🔍 Analyze Data</button>
+        </div>
+
+        <div id="result">Scan or Type Data to Check</div>
+        <div id="threatDetails">Waiting for analysis...</div>
+
+        <div class="meter">
+            <div class="circle">
+                <div class="progress">
+                    <span id="riskValue">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <button id="downloadBtn">📄 Download Report</button>
+    </section>
+
+    <section id="features" class="features">
+        <h2>Security Features</h2>
+        <div class="feature-container">
+            <div class="card">
+                <h3>📷 Universal Scanner</h3>
+                <p>Scans Web, UPI, Wi-Fi & Contact QRs.</p>
+            </div>
+            <div class="card">
+                <h3>⌨️ Manual Input Check</h3>
+                <p>Type/paste any link to analyze risk.</p>
+            </div>
+            <div class="card">
+                <h3>🔊 Voice Alerts</h3>
+                <p>Real-time speech feedback for safety.</p>
+            </div>
+            <div class="card">
+                <h3>☁️ Firebase Cloud</h3>
+                <p>Real-time cloud database integration.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 QR Shield | Cyber Security Project</p>
+    </footer>
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="analyzer.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+</html>

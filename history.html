@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Shield | Cloud Scan History</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <nav>
+            <h2 class="logo">🛡 QR Shield</h2>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#scanner">Scanner</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <h1 style="text-align:center; color:#00ff99; margin-top:30px;">Your Cloud History</h1>
+
+    <div id="history"></div>
+
+    <div style="text-align:center; margin-bottom: 40px;">
+        <button id="clearBtn">Clear My Cloud History</button>
+    </div>
+
+    <script type="module">
+        import { loadFirebaseHistory, clearFirebaseHistory } from './firebase.js';
+
+        const historyBox = document.getElementById("history");
+
+        loadFirebaseHistory((data) => {
+            historyBox.innerHTML = "";
+
+            if (!data) {
+                historyBox.innerHTML = "<p style='color: white; text-align:center;'>No scans in your Cloud Database.</p>";
+                return;
+            }
+
+            Object.keys(data).reverse().forEach(key => {
+                const item = data[key];
+                const isDangerous = item.risk >= 70;
+                historyBox.innerHTML += `
+                    <div class="history-card" style="border-left: 5px solid ${isDangerous ? 'red' : '#00ff99'};">
+                        <h3>${item.url}</h3>
+                        <p style="color: ${isDangerous ? '#ff4d4d' : '#00ff99'}; margin-top: 5px;">
+                           Risk Score: ${item.risk || 0}% | ${item.date}
+                        </p>
+                    </div>
+                `;
+            });
+        });
+
+        document.getElementById("clearBtn").onclick = () => {
+            clearFirebaseHistory();
+            localStorage.removeItem("scanHistory");
+            alert("Your Cloud History Cleared!");
+        };
+    </script>
+</body>
+</html>
