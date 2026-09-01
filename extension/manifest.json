@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "QR Shield - Scam Link Checker",
+  "version": "1.0.0",
+  "description": "Check the current page or any pasted link/UPI QR text for phishing risk, right from your toolbar.",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": ["activeTab"]
+}
