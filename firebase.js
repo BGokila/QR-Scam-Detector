@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, push, onValue, remove, get, set, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAueOOAN_sBCp052ED40rQuNX0EP5_WU6c",
@@ -22,6 +22,11 @@ function getDeviceId() {
         localStorage.setItem("qr_shield_device_id", deviceId);
     }
     return deviceId;
+}
+
+// Firebase Realtime Database keys can't contain . # $ [ ] / — sanitize a URL into a safe key
+function urlToKey(url) {
+    return encodeURIComponent(url).replace(/[.#$\[\]/]/g, "_").slice(0, 200);
 }
 
 
@@ -54,4 +59,33 @@ export function clearFirebaseHistory() {
     const deviceId = getDeviceId();
     const scanRef = ref(database, `scans/${deviceId}`);
     remove(scanRef);
+}
+
+// ---- Community Scam Reporting ----
+
+// One report per device per URL (a device can't inflate the same URL's count twice)
+export async function reportScam(url) {
+    const deviceId = getDeviceId();
+    const key = urlToKey(url);
+    const voterRef = ref(database, `reports/${key}/voters/${deviceId}`);
+
+    const voterSnap = await get(voterRef);
+    if (voterSnap.exists()) {
+        const countSnap = await get(ref(database, `reports/${key}/count`));
+        return { alreadyReported: true, count: countSnap.val() || 0 };
+    }
+
+    await set(voterRef, true);
+    await set(ref(database, `reports/${key}/url`), url);
+
+    const countRef = ref(database, `reports/${key}/count`);
+    const result = await runTransaction(countRef, (current) => (current || 0) + 1);
+    return { alreadyReported: false, count: result.snapshot.val() || 0 };
+}
+
+// Returns how many users have reported this exact URL as a scam
+export async function getReportCount(url) {
+    const key = urlToKey(url);
+    const snap = await get(ref(database, `reports/${key}/count`));
+    return snap.val() || 0;
 }
