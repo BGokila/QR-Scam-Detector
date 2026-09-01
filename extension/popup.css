@@ -1,0 +1,33 @@
+body {
+    width: 320px;
+    font-family: 'Poppins', Arial, sans-serif;
+    background: #020617;
+    color: white;
+    padding: 15px;
+}
+h2 { color: #00ff99; margin-bottom: 10px; }
+#pageUrl { font-size: 12px; color: #94a3b8; word-break: break-all; margin-bottom: 10px; }
+.result-box {
+    background: #111827;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+.result-box ul { margin: 8px 0 0 18px; padding: 0; font-size: 12px; color: #cbd5e1; }
+.manual-check { display: flex; gap: 8px; }
+#manualInput {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+}
+#checkBtn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    background: #00ff99;
+    color: #020617;
+    font-weight: bold;
+    cursor: pointer;
+}

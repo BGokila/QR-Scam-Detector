@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>QR Shield</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <h2>🛡 QR Shield</h2>
+    <p id="pageUrl">Checking current tab...</p>
+    <div id="result" class="result-box">Analyzing...</div>
+
+    <div class="manual-check">
+        <input type="text" id="manualInput" placeholder="Or paste any link/text to check">
+        <button id="checkBtn">Check</button>
+    </div>
+
+    <script src="ml_model.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>
