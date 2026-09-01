@@ -22,9 +22,15 @@
             <ul>
                 <li><a href="#">Home</a></li>
                 <li><a href="#scanner">Scanner</a></li>
+                <li><a href="#generator">Generate QR</a></li>
                 <li><a href="#features">Features</a></li>
                 <li><a href="history.html">Cloud History</a></li>
             </ul>
+            <select id="langSelect" title="Voice alert language">
+                <option value="en">English</option>
+                <option value="ta">தமிழ்</option>
+                <option value="hi">हिन्दी</option>
+            </select>
         </nav>
     </header>
 
@@ -46,6 +52,12 @@
             <button id="checkUrlBtn">🔍 Analyze Data</button>
         </div>
 
+        <div class="batch-upload">
+            <label for="batchInput" class="file-label">🖼️ Upload QR Image(s) to Scan</label>
+            <input type="file" id="batchInput" accept="image/*" multiple hidden>
+        </div>
+        <div id="batchResults"></div>
+
         <div id="result">Scan or Type Data to Check</div>
         <div id="threatDetails">Waiting for analysis...</div>
 
@@ -57,7 +69,21 @@
             </div>
         </div>
 
-        <button id="downloadBtn">📄 Download Report</button>
+        <div class="action-row">
+            <button id="downloadBtn">📄 Download Report</button>
+            <button id="reportBtn" class="danger-btn">🚩 Report as Scam</button>
+        </div>
+    </section>
+
+    <section id="generator" class="scanner">
+        <h2>Generate a Safe QR Code</h2>
+        <p class="section-sub">Create your own QR for a link, UPI ID, or Wi-Fi so people can trust it came from you.</p>
+        <div class="url-check">
+            <input type="text" id="genInput" placeholder="Enter text, URL, or upi://pay?pa=... string">
+            <button id="genBtn">⚡ Generate QR</button>
+        </div>
+        <div id="qrCanvasWrap"><canvas id="qrCanvas"></canvas></div>
+        <button id="downloadQrBtn" style="display:none;">⬇️ Download QR Image</button>
     </section>
 
     <section id="features" class="features">
@@ -72,8 +98,24 @@
                 <p>Type/paste any link to analyze risk.</p>
             </div>
             <div class="card">
+                <h3>🖼️ Batch Image Scan</h3>
+                <p>Upload multiple QR images and scan them all at once.</p>
+            </div>
+            <div class="card">
+                <h3>🧠 ML Phishing Detection</h3>
+                <p>Trained logistic regression model backs up the rule checks.</p>
+            </div>
+            <div class="card">
                 <h3>🔊 Voice Alerts</h3>
-                <p>Real-time speech feedback for safety.</p>
+                <p>Real-time speech feedback in English, Tamil & Hindi.</p>
+            </div>
+            <div class="card">
+                <h3>🚩 Community Reports</h3>
+                <p>Crowd-sourced scam flags boost the risk score for everyone.</p>
+            </div>
+            <div class="card">
+                <h3>⚡ QR Generator</h3>
+                <p>Create your own verified-safe QR codes.</p>
             </div>
             <div class="card">
                 <h3>☁️ Firebase Cloud</h3>
@@ -87,6 +129,8 @@
     </footer>
 
     <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="ml_model.js"></script>
     <script src="analyzer.js"></script>
     <script type="module" src="script.js"></script>
 </body>
