@@ -20,6 +20,16 @@
 
     <h1 style="text-align:center; color:#00ff99; margin-top:30px;">Your Cloud History</h1>
 
+    <div class="history-controls">
+        <input type="text" id="searchInput" placeholder="Search scanned links...">
+        <div class="filter-btns">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="safe">Safe</button>
+            <button class="filter-btn" data-filter="suspicious">Suspicious</button>
+            <button class="filter-btn" data-filter="dangerous">Dangerous</button>
+        </div>
+    </div>
+
     <div id="history"></div>
 
     <div style="text-align:center; margin-bottom: 40px;">
@@ -30,27 +40,63 @@
         import { loadFirebaseHistory, clearFirebaseHistory } from './firebase.js';
 
         const historyBox = document.getElementById("history");
+        const searchInput = document.getElementById("searchInput");
+        const filterBtns = document.querySelectorAll(".filter-btn");
 
-        loadFirebaseHistory((data) => {
-            historyBox.innerHTML = "";
+        let allItems = [];
+        let currentFilter = "all";
 
-            if (!data) {
-                historyBox.innerHTML = "<p style='color: white; text-align:center;'>No scans in your Cloud Database.</p>";
+        function riskBucket(risk) {
+            if (risk >= 70) return "dangerous";
+            if (risk >= 30) return "suspicious";
+            return "safe";
+        }
+
+        function render() {
+            const query = searchInput.value.trim().toLowerCase();
+            const filtered = allItems.filter(item => {
+                const matchesFilter = currentFilter === "all" || riskBucket(item.risk || 0) === currentFilter;
+                const matchesSearch = !query || (item.url || "").toLowerCase().includes(query);
+                return matchesFilter && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                historyBox.innerHTML = "<p style='color: white; text-align:center;'>No matching scans found.</p>";
                 return;
             }
 
-            Object.keys(data).reverse().forEach(key => {
-                const item = data[key];
-                const isDangerous = item.risk >= 70;
-                historyBox.innerHTML += `
-                    <div class="history-card" style="border-left: 5px solid ${isDangerous ? 'red' : '#00ff99'};">
+            historyBox.innerHTML = filtered.map(item => {
+                const bucket = riskBucket(item.risk || 0);
+                const color = bucket === "dangerous" ? "red" : (bucket === "suspicious" ? "orange" : "#00ff99");
+                return `
+                    <div class="history-card" style="border-left: 5px solid ${color};">
                         <h3>${item.url}</h3>
-                        <p style="color: ${isDangerous ? '#ff4d4d' : '#00ff99'}; margin-top: 5px;">
+                        <p style="color: ${color}; margin-top: 5px;">
                            Risk Score: ${item.risk || 0}% | ${item.date}
                         </p>
                     </div>
                 `;
-            });
+            }).join("");
+        }
+
+        loadFirebaseHistory((data) => {
+            if (!data) {
+                allItems = [];
+                render();
+                return;
+            }
+            allItems = Object.keys(data).reverse().map(key => data[key]);
+            render();
+        });
+
+        searchInput.oninput = render;
+        filterBtns.forEach(btn => {
+            btn.onclick = () => {
+                filterBtns.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                currentFilter = btn.dataset.filter;
+                render();
+            };
         });
 
         document.getElementById("clearBtn").onclick = () => {
