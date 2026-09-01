@@ -114,3 +114,79 @@ button:hover { transform: scale(1.05); background: #00cc7a; }
 .history-card { background: #111827; padding: 20px; border-radius: 15px; text-align: left; word-break: break-all; }
 
 footer { text-align: center; padding: 20px; background: #000; margin-top: 40px; }
+/* ---- New feature styles ---- */
+
+#langSelect {
+    background: #111827;
+    color: #00ff99;
+    border: 1px solid #00ff99;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+}
+
+.section-sub { color: #cbd5e1; margin: 10px auto 20px; max-width: 500px; }
+
+.batch-upload { margin: 20px auto; }
+.file-label {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #111827;
+    border: 2px dashed #00ff99;
+    border-radius: 20px;
+    cursor: pointer;
+    color: #00ff99;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+.file-label:hover { background: #1a2332; }
+
+#batchResults { max-width: 600px; margin: 15px auto; text-align: left; }
+.batch-item {
+    background: #111827;
+    padding: 12px 15px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    word-break: break-all;
+    border-left: 4px solid #00ff99;
+}
+.batch-item.error { border-left-color: #ff4d4d; color: #ff9999; }
+
+.action-row { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 10px; }
+
+.danger-btn { background: #ff4d4d; color: white; }
+.danger-btn:hover { background: #e63939; }
+
+#qrCanvasWrap { margin: 20px auto; display: flex; justify-content: center; }
+#qrCanvas { background: white; padding: 10px; border-radius: 10px; }
+
+#threatDetails ul { margin: 8px 0 0 18px; padding: 0; }
+#threatDetails li { margin-bottom: 4px; font-size: 14px; color: #cbd5e1; }
+
+.history-controls {
+    max-width: 600px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+#searchInput {
+    width: 90%;
+    max-width: 400px;
+    padding: 12px 15px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+}
+.filter-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.filter-btn {
+    padding: 8px 18px;
+    background: #111827;
+    color: white;
+    border: 1px solid #00ff99;
+    border-radius: 20px;
+    font-weight: normal;
+}
+.filter-btn.active, .filter-btn:hover { background: #00ff99; color: #020617; }
