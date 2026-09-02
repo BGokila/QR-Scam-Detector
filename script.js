@@ -136,23 +136,40 @@ document.getElementById("reportBtn").onclick = async function () {
 };
 
 // ---- QR Generator ----
+let generatedQR = null;
+
 document.getElementById("genBtn").onclick = function () {
     const text = document.getElementById("genInput").value.trim();
     if (!text) {
         alert("Enter some text, a link, or a UPI string to generate a QR.");
         return;
     }
-    const canvas = document.getElementById("qrCanvas");
-    QRCode.toCanvas(canvas, text, { width: 250, margin: 2 }, function (error) {
-        if (error) {
-            console.error(error);
-            alert("Could not generate QR for this input.");
-            return;
-        }
-        document.getElementById("downloadQrBtn").style.display = "inline-block";
+    const wrap = document.getElementById("qrCanvasWrap");
+    wrap.innerHTML = "";
+
+    generatedQR = new QRCode(wrap, {
+        text: text,
+        width: 220,
+        height: 220,
+        colorDark: "#000000",
+        colorLight: "#ffffff"
     });
+
+    document.getElementById("downloadQrBtn").style.display = "inline-block";
 };
 
+document.getElementById("downloadQrBtn").onclick = function () {
+    const wrap = document.getElementById("qrCanvasWrap");
+    const canvas = wrap.querySelector("canvas");
+    if (!canvas) {
+        alert("Generate a QR code first.");
+        return;
+    }
+    const link = document.createElement("a");
+    link.download = "QR_Shield_Generated.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+};
 document.getElementById("downloadQrBtn").onclick = function () {
     const canvas = document.getElementById("qrCanvas");
     const link = document.createElement("a");
