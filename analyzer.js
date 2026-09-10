@@ -43,7 +43,18 @@ const LANG_STRINGS = {
 function getLang() {
     return localStorage.getItem("qr_shield_lang") || "en";
 }
+const TRUSTED_DOMAINS = [
+    "wa.me", "whatsapp.com", "api.whatsapp.com", "chat.whatsapp.com", "web.whatsapp.com",
+    "google.com", "goo.gl", "youtube.com", "youtu.be",
+    "instagram.com", "facebook.com", "fb.com",
+    "linkedin.com", "twitter.com", "x.com",
+    "github.com", "wikipedia.org", "amazon.in", "amazon.com",
+    "paytm.com", "phonepe.com", "gpay.app"
+];
 
+function isTrustedDomain(domain) {
+    return TRUSTED_DOMAINS.some(d => domain === d || domain.endsWith("." + d));
+}
 // Google Safe Browsing API Check Function
 async function checkGoogleSafeBrowsing(targetUrl) {
     const apiKey = "YOUR_GOOGLE_SAFE_BROWSING_API_KEY";
@@ -106,6 +117,31 @@ async function analyzeURL(inputData, extra = {}) {
         try {
             parsedUrl = new URL(safeUrl);
             let domain = parsedUrl.hostname;
+            if (isTrustedDomain(domain)) {
+    risk = 5;
+    typeDescription = "Web URL / Link (Trusted Service)";
+    threatMessage = "SAFE ✅";
+    circleColor = "#00ff99";
+    voiceText = strings.safe;
+    reasons.push("Recognized trusted domain — skipped heuristic/ML scoring");
+
+    document.getElementById("riskValue").innerText = risk + "%";
+    document.querySelector(".circle").style.borderColor = circleColor;
+    document.getElementById("result").innerText = "Scanned Data: " + data;
+    document.getElementById("threatDetails").innerHTML = `
+        <h3>Security Details</h3>
+        <p><b>Data Type:</b> ${typeDescription}</p>
+        <p><b>Threat Level:</b> ${threatMessage}</p>
+        <p><b>Risk Score:</b> ${risk}%</p>
+        <p><b>Why:</b></p>
+        <ul>${reasons.map(r => `<li>${r}</li>`).join("")}</ul>
+    `;
+    window.speechSynthesis.cancel();
+    let voice = new SpeechSynthesisUtterance(voiceText);
+    voice.lang = strings.code;
+    window.speechSynthesis.speak(voice);
+    return risk;
+}
             typeDescription = "Web URL / Link";
 
             let isGoogleFlagged = await checkGoogleSafeBrowsing(safeUrl);
