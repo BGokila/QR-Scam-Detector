@@ -170,10 +170,3 @@ document.getElementById("downloadQrBtn").onclick = function () {
     link.href = canvas.toDataURL("image/png");
     link.click();
 };
-document.getElementById("downloadQrBtn").onclick = function () {
-    const canvas = document.getElementById("qrCanvas");
-    const link = document.createElement("a");
-    link.download = "QR_Shield_Generated.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-};
